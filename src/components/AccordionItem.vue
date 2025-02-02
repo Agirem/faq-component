@@ -1,21 +1,20 @@
 <template>
-  <div class="accordion-item">
-    <div 
-      class="accordion-header"
-      @click="$emit('toggle')"
-    >
+  <div>
+    <div class="accordion-header" @click="$emit('toggle')">
       <h3>{{ question }}</h3>
       <span class="icon">{{ isOpen ? '−' : '+' }}</span>
     </div>
     
-    <div 
-      class="accordion-content"
-      :class="{ 'open': isOpen }"
-    >
-      <div class="accordion-content-inner">
-        <p><slot></slot></p>
+    <transition name="slide">
+      <div 
+        v-show="isOpen"
+        class="accordion-content"
+      >
+        <div class="accordion-content-inner">
+          <p><slot></slot></p>
+        </div>
       </div>
-    </div>
+    </transition>
   </div>
 </template>
 
@@ -36,20 +35,16 @@ export default {
 </script>
 
 <style scoped>
-.accordion-item {
-  margin-bottom: 1rem;
-  border-radius: 12px;
-  background-color: white;
-  box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.05);
-}
-
 .accordion-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1.5rem;
+  padding: 0.75rem 1.5rem;
   cursor: pointer;
   border-radius: 12px;
+  background-color: white;
+  border: 1px solid #F1F5F9;
+  margin-bottom: 0.5rem;
 }
 
 .accordion-header h3 {
@@ -71,33 +66,37 @@ export default {
 }
 
 .accordion-content {
-  max-height: 0;
-  overflow: hidden;
-  transition: all 0.3s ease-out;
   background-color: #F8F9FC;
-  border-bottom-left-radius: 12px;
-  border-bottom-right-radius: 12px;
-}
-
-.accordion-content.open {
-  max-height: 500px;
+  border-radius: 12px;
 }
 
 .accordion-content-inner {
-  padding: 1.5rem;
-  opacity: 0;
-  transform: translateY(-10px);
-  transition: all 0.3s ease-out;
-}
-
-.accordion-content.open .accordion-content-inner {
-  opacity: 1;
-  transform: translateY(0);
+  padding: 1.25rem 1.5rem;
 }
 
 .accordion-content-inner p {
   margin: 0;
   color: #64748B;
   line-height: 1.6;
+}
+
+.slide-enter-active,
+.slide-leave-active {
+  transition: all 0.3s ease-out;
+  max-height: 300px;
+}
+
+.slide-enter-from,
+.slide-leave-to {
+  max-height: 0;
+  opacity: 0;
+  transform: translateY(-10px);
+}
+
+.slide-enter-to,
+.slide-leave-from {
+  max-height: 300px;
+  opacity: 1;
+  transform: translateY(0);
 }
 </style> 

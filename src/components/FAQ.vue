@@ -52,11 +52,17 @@ export default {
     }
   },
   methods: {
-    toggleFaq(index) {
-      this.faqs = this.faqs.map((faq, i) => ({
-        ...faq,
-        isOpen: i === index ? !faq.isOpen : false
-      }))
+    async toggleFaq(index) {
+      // D'abord, on ferme l'accordéon ouvert s'il y en a un
+      const openIndex = this.faqs.findIndex(faq => faq.isOpen)
+      if (openIndex !== -1 && openIndex !== index) {
+        this.faqs[openIndex].isOpen = false
+        // On attend un peu que l'animation de fermeture se termine
+        await new Promise(resolve => setTimeout(resolve, 300))
+      }
+      
+      // Ensuite, on ouvre/ferme l'accordéon cliqué
+      this.faqs[index].isOpen = !this.faqs[index].isOpen
     }
   }
 }</script> 
